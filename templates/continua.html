@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>Statistic Calculator Tabajara v1.0 - Flask Edition</title>
+    </head>
+	<body>
+		<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
+		<br/>
+		<h2>Tabela da continua</h2>
+		<br/>
+		<table border="1" style="width:820px;">
+			<tr>
+				<th>Classe</th>
+				<th>Intervalo</th>
+				<th>fi</th>
+				<th>fr%</th>
+				<th>F</th>
+				<th>F%</th>
+			</tr>
+			{% for x in range(statistic.indice) %}
+			<tr align="center">
+				<td>{{ x+1 }}</th>
+				<td>{{ statistic.intervalo[x] }}</td>
+				<td>{{ statistic.fi[x] }}</td>
+				<td>{{ statistic.fr[x] }}%</td>
+				<td>{{ statistic.F[x] }}</td>
+				<td>{{ statistic.Fr[x] }}%</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<br/>
+		<form name="form_id" method="GET" action="/">
+			<input type="submit" value="Voltar"/>
+		</form>
+	<body>
+</html>
