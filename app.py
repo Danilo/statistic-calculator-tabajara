@@ -28,29 +28,40 @@ def index():
 	
 @app.route('/data', methods=['GET', 'POST'])
 def data():
-	discreta = Discreta()
-	discreta.indice = 8
-	discreta.xi = [18, 19, 20, 21, 22, 24, 26, 28]
-	discreta.fi = [6, 5, 1, 9, 2, 2, 4, 1]
-	discreta.fr = [20.00, 16.67, 3.33, 30.00, 6.67, 6.67, 13.33, 3.33]
-	discreta.F = [6, 11, 12, 21, 23, 25, 29, 30]
-	discreta.Fr = [20.00, 36.67, 40.00, 70.00, 76.67, 83.33, 96.67, 100.00]
-	
-	continua = Continua()
-	continua.indice = 8
-	continua.intervalo = [61, 71, 81, 91, 101, 111, 121, 131, 141]
-	continua.fi = [2, 5, 6, 10, 12, 18, 15, 02]
-	continua.fr = [2.86, 7.14, 8.57, 14.29, 17.14, 25.71, 21.43, 2.86]
-	continua.F = [2, 7, 13, 23, 35, 53, 68, 70]
-	continua.Fr = [2.86, 10.00, 18.57, 32.86, 50.00, 75.71, 97.14, 100.00]
 	
 	if request.method == 'POST':
 		
 		if request.form['form_id'] == 'discreta':
+			dados_brutos = data_to_rol([18, 26, 21, 24, 26, 18, 19, 21, 18, 21, 24, 26, 28, 26, 21, 18, 19, 21, 21, 20, 21, 22, 18, 19, 21, 22, 18, 19, 21, 19])
+			discreta = Discreta()
+			discreta.indice = 8
+			discreta.insert_xi(dados_brutos)
+			discreta.insert_fi(dados_brutos)
+			discreta.fr = [20.00, 16.67, 3.33, 30.00, 6.67, 6.67, 13.33, 3.33]
+			discreta.F = [6, 11, 12, 21, 23, 25, 29, 30]
+			discreta.Fr = [20.00, 36.67, 40.00, 70.00, 76.67, 83.33, 96.67, 100.00]
 			return render_template('discreta.html', statistic=discreta)
-		
-		if request.form['form_id'] == 'continua':
+		elif request.form['form_id'] == 'continua':
+			dados_brutos = data_to_rol([111, 90, 121, 105, 122, 61, 128, 112, 128, 93, 108, 138, 88, 110, 112, 112, 97, 128, 102, 125, 87, 119, 104, 116, 96, 114, 107, 113, 80, 113, 123, 95, 115, 70, 115, 101, 114, 127, 92, 103, 78, 118, 100, 115, 116, 98, 119, 72, 125, 109, 79, 139, 75, 109, 123, 124, 108, 125, 116, 83, 94, 106, 117, 82, 122, 99, 124, 84, 91, 130])
+			continua = Continua()
+			continua.indice = 8
+			continua.intervalo = [61, 71, 81, 91, 101, 111, 121, 131, 141]
+			continua.fi = [2, 5, 6, 10, 12, 18, 15, 02]
+			continua.fr = [2.86, 7.14, 8.57, 14.29, 17.14, 25.71, 21.43, 2.86]
+			continua.F = [2, 7, 13, 23, 35, 53, 68, 70]
+			continua.Fr = [2.86, 10.00, 18.57, 32.86, 50.00, 75.71, 97.14, 100.00]
 			return render_template('continua.html', statistic=continua)
+		else:
+			return render_template("""
+				<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
+				<br/>
+				<h1>Request error!!!</h1>
+				""")
+
+def data_to_rol(my_list):
+	my_list.sort()
+	return my_list
+
 
 class Discreta(object):
 	indice = 0
@@ -67,6 +78,29 @@ class Discreta(object):
 		self.fr = []
 		self.F = []
 		self.Fr = []
+
+	def insert_xi(self, my_list):
+		xi = []
+		
+		for x in my_list:
+			if xi.count(int(x)) == 0:
+				xi.append(x)
+		
+		self.xi = xi
+		return xi
+
+	def insert_fi(self, my_list):
+		fi = []
+		xi = []
+
+		for x in my_list:
+			if xi.count(int(x)) == 0:
+				xi.append(x)
+				fi.append(my_list.count(x))
+		
+		self.fi = fi
+		return fi
+	
 
 class Continua(object):
 	indice = 0
