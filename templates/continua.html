@@ -19,7 +19,7 @@
 			{% for x in range(statistic.indice) %}
 			<tr align="center">
 				<td>{{ x+1 }}</th>
-				<td>{{ statistic.intervalo[x] }}</td>
+				<td>{{ statistic.intervalo[x] }} |-- {{ statistic.intervalo[x+1] }}</td>
 				<td>{{ statistic.fi[x] }}</td>
 				<td>{{ statistic.fr[x] }}%</td>
 				<td>{{ statistic.F[x] }}</td>
