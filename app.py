@@ -32,7 +32,7 @@ def data():
 	if request.method == 'POST':
 		
 		if request.form['form_id'] == 'discreta':
-			dados_brutos = data_to_rol([18, 26, 21, 24, 26, 18, 19, 21, 18, 21, 24, 26, 28, 26, 21, 18, 19, 21, 21, 20, 21, 22, 18, 19, 21, 22, 18, 19, 21, 19])
+			dados_brutos = data_to_rol(request.form['dados'])
 			discreta = Discreta()
 			discreta.indice = 8
 			discreta.insert_xi(dados_brutos)
