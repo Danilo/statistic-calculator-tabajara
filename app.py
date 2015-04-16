@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, render_template
 app = Flask(__name__)
 
+# 18 26 21 24 26 18 19 21 18 21 24 26 28 26 21 18 19 21 21 20 21 22 18 19 21 22 18 19 21 19
 # 111,90,121,105,122,61,128,112,128,93,108,138,88,110,112,112,97,128,102,125,87,119,104,116,96,114,107,113,80,113,123,95,115,70,115,101,114,127,92,103,78,118,100,115,116,98,119,72,125,109,79,139,75,109,123,124,108,125,116,83,94,106,117,82,122,99,124,84,91,130
 # 01  61|--71   02   2.86%  02    2.86%
 # 02  71|--81   05   7.14%  07   10.00%
@@ -20,7 +21,6 @@ def index():
 def data():
 	
 	if request.method == 'POST':
-		print len(request.form['dados'])
 		
 		if len(request.form['dados']) == 0:
 			return """
@@ -34,10 +34,11 @@ def data():
 			discreta = Discreta()
 			discreta.insert_xi(dados_brutos)
 			discreta.insert_fi(dados_brutos)
-			discreta.Efi = len(discreta.xi)
-			discreta.fr = [20.00, 16.67, 3.33, 30.00, 6.67, 6.67, 13.33, 3.33]
-			discreta.F = [6, 11, 12, 21, 23, 25, 29, 30]
-			discreta.Fr = [20.00, 36.67, 40.00, 70.00, 76.67, 83.33, 96.67, 100.00]
+			discreta.insert_Efi(discreta.fi)
+			discreta.insert_fr(discreta.fi, discreta.Efi)
+			discreta.insert_F(discreta.fi)
+			discreta.insert_Fr(discreta.fr)
+			discreta.lines = len(discreta.xi)
 			return render_template('discreta.html', statistic=discreta)
 		elif request.form['form_id'] == 'continua':
 			dados_brutos = data_to_rol([111, 90, 121, 105, 122, 61, 128, 112, 128, 93, 108, 138, 88, 110, 112, 112, 97, 128, 102, 125, 87, 119, 104, 116, 96, 114, 107, 113, 80, 113, 123, 95, 115, 70, 115, 101, 114, 127, 92, 103, 78, 118, 100, 115, 116, 98, 119, 72, 125, 109, 79, 139, 75, 109, 123, 124, 108, 125, 116, 83, 94, 106, 117, 82, 122, 99, 124, 84, 91, 130])
@@ -66,6 +67,7 @@ def data_to_rol(my_list):
 
 
 class Discreta(object):
+	lines = 0
 	Efi = 0
 	xi = []
 	fi = []
@@ -74,6 +76,7 @@ class Discreta(object):
 	Fr = []
 	
 	def __init__(self):
+		self.lines = 0
 		self.Efi = 0
 		self.xi = []
 		self.fi = []
@@ -102,6 +105,48 @@ class Discreta(object):
 		
 		self.fi = fi
 		return fi
+	
+	def insert_Efi(self, my_list):
+		Efi = 0
+		
+		for x in my_list:
+			Efi += int(x)
+		
+		self.Efi = Efi
+		return Efi
+	
+	def insert_fr(self, my_list, total):
+		fr = []
+		num = 0.0
+		
+		for x in my_list:
+			num = ((float(x) / float(total)) * 100)
+			fr.append(float("{0:6.2f}".format(num)))
+		
+		self.fr = fr
+		return fr
+	
+	def insert_F(self, my_list):
+		F = []
+		i = 0
+		
+		for x in my_list:
+			i += int(x)
+			F.append(i)
+		
+		self.F = F
+		return F
+	
+	def insert_Fr(self, my_list):
+		i = 0
+		Fr = []
+
+		for x in my_list:
+			i += float(x)
+			Fr.append(i)
+
+		self.Fr = Fr
+		return Fr
 	
 
 class Continua(object):
