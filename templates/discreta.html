@@ -44,9 +44,9 @@
 		<br/>
 		<h2>Mediana:</h2>
 		{% if (statistic.Efi % 2) == 0 %}
-		(Efi / 2) e (Efi + 1) / 2 = {{ (statistic.Efi/2)|int }} e {{ ((statistic.Efi+1)/2)|round|int }}
+		(Efi / 2) e (Efi + 1) / 2 = {{ (statistic.Efi/2)|int }}º e {{ ((statistic.Efi+1)/2)|round|int }}º posições
 		{% else %}
-		(Efi + 1) / 2 = {{ ((statistic.Efi+1)/2)|round }}
+		(Efi + 1) / 2 = {{ ((statistic.Efi+1)/2)|round }}º posição
 		{% endif %}
 		<br/>
 		Md = 
