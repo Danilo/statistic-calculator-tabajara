@@ -15,6 +15,7 @@
 				<th>fr%</th>
 				<th>F</th>
 				<th>F%</th>
+				<th>Média(xi.fi)</th>
 			</tr>
 			{% for x in range(statistic.lines) %}
 			<tr align="center">
@@ -24,9 +25,38 @@
 				<td>{{ statistic.fr[x] }}%</td>
 				<td>{{ statistic.F[x] }}</td>
 				<td>{{ statistic.Fr[x] }}%</td>
+				<td>{{ statistic.media[x] }}</td>
 			</tr>
 			{% endfor %}
+			<tr align="center">
+				<td>Total</td>
+				<td> </td>
+				<td>{{ statistic.Efi }}</td>
+				<td> </td>
+				<td> </td>
+				<td> </td>
+				<td>{{ (statistic.Exi_fi) }}</td>
+			<tr>
 		</table>
+		<br/>
+		<h2>Média:</h2>
+		X = {{ (statistic.Exi_fi) }}/{{ statistic.Efi }} => A Média ponderada é de {{ (statistic.Exi_fi / statistic.Efi) }}
+		<br/>
+		<h2>Mediana:</h2>
+		{% if (statistic.Efi % 2) == 0 %}
+		(Efi / 2) e (Efi + 1) / 2 = {{ (statistic.Efi/2)|int }} e {{ ((statistic.Efi+1)/2)|round|int }}
+		{% else %}
+		(Efi + 1) / 2 = {{ ((statistic.Efi+1)/2)|round }}
+		{% endif %}
+		<br/>
+		Md = 
+		<br/>
+		<h2>Moda:</h2>
+		Mo = 
+		{% for x in range(statistic.lines) %}
+			{{ statistic.moda[x] }}
+		{% endfor %}
+		<br/>
 		<br/>
 		<form name="form_id" method="GET" action="/">
 			<input type="submit" value="Voltar"/>

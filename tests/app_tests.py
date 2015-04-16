@@ -26,6 +26,12 @@ class TestDiscretaClass(unittest.TestCase):
 	def test_insert_Fr(self):
 		self.assertEqual(self.discreta.insert_Fr([40.00, 40.00, 20.00]), [40.00, 80.00, 100.00])
 	
+	def test_insert_media(self):
+		self.assertEqual(self.discreta.insert_media([1, 2, 3], [2, 2, 1]), [2, 4, 3])
+	
+	def test_insert_Exi_fi(self):
+		self.assertEqual(self.discreta.insert_Exi_fi([2, 4, 3]), 9)
+	
 
 if __name__ == '__main__':
 	unittest.main()

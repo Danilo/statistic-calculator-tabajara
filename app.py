@@ -38,6 +38,9 @@ def data():
 			discreta.insert_fr(discreta.fi, discreta.Efi)
 			discreta.insert_F(discreta.fi)
 			discreta.insert_Fr(discreta.fr)
+			discreta.insert_media(discreta.xi, discreta.fi)
+			discreta.insert_Exi_fi(discreta.media)
+			discreta.moda = [2000, 3000]
 			discreta.lines = len(discreta.xi)
 			return render_template('discreta.html', statistic=discreta)
 		elif request.form['form_id'] == 'continua':
@@ -74,6 +77,9 @@ class Discreta(object):
 	fr = []
 	F = []
 	Fr = []
+	media = []
+	Exi_fi = 0
+	moda = []
 	
 	def __init__(self):
 		self.lines = 0
@@ -83,6 +89,9 @@ class Discreta(object):
 		self.fr = []
 		self.F = []
 		self.Fr = []
+		self.media = []
+		self.Exi_fi = 0
+		self.moda = []
 
 	def insert_xi(self, my_list):
 		xi = []
@@ -147,6 +156,25 @@ class Discreta(object):
 
 		self.Fr = Fr
 		return Fr
+	
+	def insert_media(self, my_xi_list, my_fi_list):
+		media = []
+		i = len(my_xi_list)
+		
+		for x in range(i):
+			media.append(float(my_xi_list[x]) * float(my_fi_list[x]))
+		
+		self.media = media
+		return media
+	
+	def insert_Exi_fi(self, my_list):
+		Exi_fi = 0
+		
+		for x in my_list:
+			Exi_fi += float(x)
+		
+		self.Exi_fi = Exi_fi
+		return Exi_fi
 	
 
 class Continua(object):
