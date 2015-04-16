@@ -61,7 +61,7 @@ def data_to_rol(my_list):
 	rol = []
 	
 	for x in my_list:
-		rol.append(int(x))
+		rol.append(x)
 	rol.sort()
 	return rol
 
@@ -88,7 +88,7 @@ class Discreta(object):
 		xi = []
 		
 		for x in my_list:
-			if xi.count(int(x)) == 0:
+			if xi.count(x) == 0:
 				xi.append(x)
 		
 		self.xi = xi
@@ -99,7 +99,7 @@ class Discreta(object):
 		xi = []
 
 		for x in my_list:
-			if xi.count(int(x)) == 0:
+			if xi.count(x) == 0:
 				xi.append(x)
 				fi.append(my_list.count(x))
 		
