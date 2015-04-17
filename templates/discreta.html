@@ -44,12 +44,14 @@
 		<br/>
 		<h2>Mediana:</h2>
 		{% if (statistic.Efi % 2) == 0 %}
-		(Efi / 2) e (Efi + 1) / 2 = {{ (statistic.Efi/2)|int }}º e {{ ((statistic.Efi+1)/2)|round|int }}º posições
+			(Efi / 2) e (Efi + 1) / 2 = {{ (statistic.Efi/2)|round|int }}º e {{ ((statistic.Efi+1)/2)|round|int }}º posições
+			<br/>
+			Md = ({{ rol[(statistic.Efi/2)|int] }} + {{ rol[((statistic.Efi+1)/2)|int] }}) / 2 => {{ ((rol[(statistic.Efi/2)|int]|float + rol[(statistic.Efi/2)|int]|float) / 2) }}
 		{% else %}
 		(Efi + 1) / 2 = {{ ((statistic.Efi+1)/2)|round }}º posição
+			<br/>
+			Md = ({{ rol[(statistic.Efi/2)|int|float] }}) / 2 =>
 		{% endif %}
-		<br/>
-		Md = 
 		<br/>
 		<h2>Moda:</h2>
 		Mo = 
