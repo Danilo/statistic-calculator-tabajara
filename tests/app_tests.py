@@ -32,6 +32,9 @@ class TestDiscretaClass(unittest.TestCase):
 	def test_insert_Exi_fi(self):
 		self.assertEqual(self.discreta.insert_Exi_fi([2, 4, 3]), 9)
 	
+	def test_insert_moda(self):
+		self.assertEqual(self.discreta.insert_moda([17, 18, 19, 20, 21], [3, 18, 17, 8, 4]), [18])
+	
 
 if __name__ == '__main__':
 	unittest.main()

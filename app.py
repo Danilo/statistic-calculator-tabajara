@@ -1,9 +1,12 @@
 import os
 from flask import Flask, request, render_template
 app = Flask(__name__)
-
+# discreta examples
+# 3 4 3.5 5 3.5 4 5 5.5 4 5
 # 18 26 21 24 26 18 19 21 18 21 24 26 28 26 21 18 19 21 21 20 21 22 18 19 21 22 18 19 21 19
-# 111,90,121,105,122,61,128,112,128,93,108,138,88,110,112,112,97,128,102,125,87,119,104,116,96,114,107,113,80,113,123,95,115,70,115,101,114,127,92,103,78,118,100,115,116,98,119,72,125,109,79,139,75,109,123,124,108,125,116,83,94,106,117,82,122,99,124,84,91,130
+
+#continua
+# 111 90 121 105 122 61 128 112 128 93 108 138 88 110 112 112 97 128 102 125 87 119 104 116 96 114 107 113 80 113 123 95 115 70 115 101 114 127 92 103 78 118 100 115 116 98 119 72 125 109 79 139 75 109 123 124 108 125 116 83 94 106 117 82 122 99 124 84 91 130
 # 01  61|--71   02   2.86%  02    2.86%
 # 02  71|--81   05   7.14%  07   10.00%
 # 03  81|--91   06   8.57%  13   18.57%
@@ -40,7 +43,7 @@ def data():
 			discreta.insert_Fr(discreta.fr)
 			discreta.insert_media(discreta.xi, discreta.fi)
 			discreta.insert_Exi_fi(discreta.media)
-			discreta.moda = [2000, 3000]
+			discreta.insert_moda(discreta.xi, discreta.fi)
 			discreta.lines = len(discreta.xi)
 			return render_template('discreta.html', statistic=discreta)
 		elif request.form['form_id'] == 'continua':
@@ -176,6 +179,30 @@ class Discreta(object):
 		self.Exi_fi = Exi_fi
 		return Exi_fi
 	
+	def insert_moda(self, my_xi_list, my_fi_list):
+		moda = []
+		number = 0
+		position = 0
+		
+		for x, s in enumerate(my_fi_list):
+			if number < s:
+				number = s
+				position = x
+		moda.append(my_xi_list[position])
+		
+		if my_fi_list.count(number) > 1:
+			number = 0
+			position = 0
+			
+			for j, t in enumerate(my_fi_list):
+				if number <= t:
+					if number != moda[len(moda)-1]:
+						number = t
+						position = j
+			moda.append(my_xi_list[position])
+		self.moda = moda
+		return moda
+	
 
 class Continua(object):
 	indice = 0
@@ -195,5 +222,5 @@ class Continua(object):
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
-	# app.run(debug=True)
-	app.run(host='0.0.0.0', port=port)
+	app.run(debug=True)
+	# app.run(host='0.0.0.0', port=port)
