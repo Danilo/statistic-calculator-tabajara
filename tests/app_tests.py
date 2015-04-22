@@ -1,5 +1,5 @@
 import unittest
-from app import data_to_rol, Discreta
+from app import data_to_rol, Discreta, Continua
 
 class TestDiscretaClass(unittest.TestCase):
 	def setUp(self):
@@ -35,6 +35,25 @@ class TestDiscretaClass(unittest.TestCase):
 	def test_insert_moda(self):
 		self.assertEqual(self.discreta.insert_moda([17, 18, 19, 20, 21], [3, 18, 17, 8, 4]), [18])
 	
+
+class TestContinuaClass(unittest.TestCase):
+	def setUp(self):
+		self.continua = Continua()
+	
+	def test_data_to_rol(self):
+		self.assertEqual(data_to_rol([1, 2, 3, 2, 1]), [1, 1, 2, 2, 3])
+	
+	def test_insert_at(self):
+		self.assertEqual(self.continua.insert_at([1000, 1500, 2000, 2100, 2800, 3000, 3900, 4000, 4100, 5000]), 4000)
+	
+	def test_insert_fi(self):
+		self.assertEqual(self.continua.insert_fi([1, 2, 3, 2, 1]), [2, 2, 1])
+	
+	def test_insert_k(self):
+		self.assertEqual(self.continua.insert_k([3, 3, 2, 2]), 3)
+	
+	def test_insert_xi(self):
+		self.assertEqual(self.continua.insert_xi([1000, 1500, 2000, 2100, 2800, 3000, 3900, 4000, 4100, 5000], 4000, 10), [1000, 2333, 3666, 4999])
 
 if __name__ == '__main__':
 	unittest.main()

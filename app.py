@@ -1,4 +1,4 @@
-import os
+import os, math
 from flask import Flask, request, render_template
 app = Flask(__name__)
 # discreta examples
@@ -47,7 +47,7 @@ def data():
 			discreta.lines = len(discreta.xi)
 			return render_template('discreta.html', statistic=discreta, rol=dados_brutos)
 		elif request.form['form_id'] == 'continua':
-			dados_brutos = data_to_rol([111, 90, 121, 105, 122, 61, 128, 112, 128, 93, 108, 138, 88, 110, 112, 112, 97, 128, 102, 125, 87, 119, 104, 116, 96, 114, 107, 113, 80, 113, 123, 95, 115, 70, 115, 101, 114, 127, 92, 103, 78, 118, 100, 115, 116, 98, 119, 72, 125, 109, 79, 139, 75, 109, 123, 124, 108, 125, 116, 83, 94, 106, 117, 82, 122, 99, 124, 84, 91, 130])
+			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			continua = Continua()
 			continua.indice = 8
 			continua.intervalo = [61, 71, 81, 91, 101, 111, 121, 131, 141]
@@ -55,7 +55,7 @@ def data():
 			continua.fr = [2.86, 7.14, 8.57, 14.29, 17.14, 25.71, 21.43, 2.86]
 			continua.F = [2, 7, 13, 23, 35, 53, 68, 70]
 			continua.Fr = [2.86, 10.00, 18.57, 32.86, 50.00, 75.71, 97.14, 100.00]
-			return render_template('continua.html', statistic=continua)
+			return render_template('continua.html', statistic=continua, rol=dados_brutos)
 		else:
 			return """
 				<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
@@ -70,7 +70,6 @@ def data_to_rol(my_list):
 		rol.append(x)
 	rol.sort()
 	return rol
-
 
 class Discreta(object):
 	lines = 0
@@ -203,22 +202,67 @@ class Discreta(object):
 		self.moda = moda
 		return moda
 	
+	
 
 class Continua(object):
 	indice = 0
-	intervalo = []
+	at = 0
 	fi = []
+	k = 0
 	fr = []
 	F = []
 	Fr = []
 	
 	def __init__(self):
 		self.indice = 0
-		self.intervalo = []
+		self.at = 0
 		self.fi = []
+		self.k
 		self.fr = []
 		self.F = []
 		self.Fr = []
+	
+	def insert_at(self, my_list):
+		at = 0
+		at = float(my_list[len(my_list)-1] - my_list[0])
+		self.at = at
+		return at
+	
+	def insert_fi(self, my_list):
+		fi = []
+		xi = []
+		
+		for x in my_list:
+			if xi.count(x) == 0:
+				xi.append(x)
+				fi.append(my_list.count(x))
+		
+		self.fi = fi
+		return fi
+	
+	def insert_k(self, my_list):
+		k = 0
+		total = 0.0
+		
+		for x in my_list:
+			total += float(x)
+		k = round(math.sqrt(total))
+		self.k = k
+		return k
+	
+	def insert_xi(self, my_list, at, k):
+		xi = []
+		
+		ic = round(at / int(math.sqrt(k)))
+		xi.append(my_list[0])
+		
+		for x in range(int(math.sqrt(k))):
+			if x != my_list[0]:
+				xi.append(int(xi[len(xi) - 1] + ic))
+		
+		self.xi = xi
+		return xi
+	
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
