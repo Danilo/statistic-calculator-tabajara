@@ -10,27 +10,45 @@
 			{{ rol[x]|int }}
 		{% endfor %}
 		<br/>
+		<h2>K</h2>
+		K = √Efi => √{{ statistic.Efi }} = {{ statistic.k }}
+		<br/>
+		<h2>AT</h2>
+		At = Xmax - Xmin => {{statistic.xmax}} - {{statistic.xmin}} = {{ statistic.at }}
+		<br/>
+		<h2>IC</h2>
+		Ic = at/k => {{ statistic.at }} / {{ statistic.k }} = {{ (statistic.at / statistic.k)|round }}
+		<br/>
 		<h2>Tabela da continua</h2>
 		<br/>
 		<table border="1" style="width:820px;">
 			<tr>
 				<th>Classe</th>
-				<th>Intervalo</th>
+				<th>Intervalo(xi)</th>
 				<th>fi</th>
 				<th>fr%</th>
 				<th>F</th>
 				<th>F%</th>
 			</tr>
-			{% for x in range(statistic.indice) %}
+			{% for x in range((statistic.k)|int) %}
 			<tr align="center">
 				<td>{{ x+1 }}</th>
-				<td>{{ statistic.intervalo[x] }} |-- {{ statistic.intervalo[x+1] }}</td>
+				<td>{{ statistic.xi[x] }} |-- {{ statistic.xi[x+1] }}</td>
 				<td>{{ statistic.fi[x] }}</td>
 				<td>{{ statistic.fr[x] }}%</td>
 				<td>{{ statistic.F[x] }}</td>
 				<td>{{ statistic.Fr[x] }}%</td>
 			</tr>
 			{% endfor %}
+			<tr align="center">
+				<td>Total</td>
+				<td> </td>
+				<td>{{ statistic.Efi }}</td>
+				<td> </td>
+				<td> </td>
+				<td> </td>
+				<td>{{ (statistic.Exi_fi) }}</td>
+			<tr>
 		</table>
 		<br/>
 		<form name="form_id" method="GET" action="/">

@@ -19,19 +19,19 @@ app = Flask(__name__)
 @app.route('/')
 def index():
 	return render_template('index.html')
-	
+
 @app.route('/data', methods=['GET', 'POST'])
 def data():
-	
+
 	if request.method == 'POST':
-		
+
 		if len(request.form['dados']) == 0:
 			return """
 				<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
 				<br/>
 				<h1>Data error!!!</h1>
 				"""
-		
+
 		if request.form['form_id'] == 'discreta':
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			discreta = Discreta()
@@ -49,12 +49,17 @@ def data():
 		elif request.form['form_id'] == 'continua':
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			continua = Continua()
-			continua.indice = 8
-			continua.intervalo = [61, 71, 81, 91, 101, 111, 121, 131, 141]
-			continua.fi = [2, 5, 6, 10, 12, 18, 15, 02]
-			continua.fr = [2.86, 7.14, 8.57, 14.29, 17.14, 25.71, 21.43, 2.86]
-			continua.F = [2, 7, 13, 23, 35, 53, 68, 70]
-			continua.Fr = [2.86, 10.00, 18.57, 32.86, 50.00, 75.71, 97.14, 100.00]
+			continua.insert_fi(dados_brutos)
+			continua.insert_Efi(continua.fi)
+			continua.insert_at(dados_brutos)
+			continua.insert_k(dados_brutos, continua.Efi)
+			continua.get_intervalo(dados_brutos, continua.at, continua.k)
+			# continua.insert_new_fi(dados_brutos)
+			print "continua.xi %s" % continua.xi
+			print "continua.fi %s" %continua.fi
+			# continua.insert_fr(continua.fi, continua.Efi)
+			# continua.insert_F(continua.fi)
+			# continua.insert_Fr(continua.fr)
 			return render_template('continua.html', statistic=continua, rol=dados_brutos)
 		else:
 			return """
@@ -65,9 +70,9 @@ def data():
 
 def data_to_rol(my_list):
 	rol = []
-	
+
 	for x in my_list:
-		rol.append(x)
+		rol.append(float(x))
 	rol.sort()
 	return rol
 
@@ -82,7 +87,7 @@ class Discreta(object):
 	media = []
 	Exi_fi = 0
 	moda = []
-	
+
 	def __init__(self):
 		self.lines = 0
 		self.Efi = 0
@@ -97,11 +102,11 @@ class Discreta(object):
 
 	def insert_xi(self, my_list):
 		xi = []
-		
+
 		for x in my_list:
 			if xi.count(x) == 0:
 				xi.append(x)
-		
+
 		self.xi = xi
 		return xi
 
@@ -113,41 +118,41 @@ class Discreta(object):
 			if xi.count(x) == 0:
 				xi.append(x)
 				fi.append(my_list.count(x))
-		
+
 		self.fi = fi
 		return fi
-	
+
 	def insert_Efi(self, my_list):
 		Efi = 0
-		
+
 		for x in my_list:
 			Efi += int(x)
-		
+
 		self.Efi = Efi
 		return Efi
-	
+
 	def insert_fr(self, my_list, total):
 		fr = []
 		num = 0.0
-		
+
 		for x in my_list:
 			num = ((float(x) / float(total)) * 100)
 			fr.append(float("{0:6.2f}".format(num)))
-		
+
 		self.fr = fr
 		return fr
-	
+
 	def insert_F(self, my_list):
 		F = []
 		i = 0
-		
+
 		for x in my_list:
 			i += int(x)
 			F.append(i)
-		
+
 		self.F = F
 		return F
-	
+
 	def insert_Fr(self, my_list):
 		i = 0
 		Fr = []
@@ -158,41 +163,41 @@ class Discreta(object):
 
 		self.Fr = Fr
 		return Fr
-	
+
 	def insert_media(self, my_xi_list, my_fi_list):
 		media = []
 		i = len(my_xi_list)
-		
+
 		for x in range(i):
 			media.append(float(my_xi_list[x]) * float(my_fi_list[x]))
-		
+
 		self.media = media
 		return media
-	
+
 	def insert_Exi_fi(self, my_list):
 		Exi_fi = 0
-		
+
 		for x in my_list:
 			Exi_fi += float(x)
-		
+
 		self.Exi_fi = Exi_fi
 		return Exi_fi
-	
+
 	def insert_moda(self, my_xi_list, my_fi_list):
 		moda = []
 		number = 0
 		position = 0
-		
+
 		for x, s in enumerate(my_fi_list):
 			if number < s:
 				number = s
 				position = x
 		moda.append(my_xi_list[position])
-		
+
 		if my_fi_list.count(number) > 1:
 			number = 0
 			position = 0
-			
+
 			for j, t in enumerate(my_fi_list):
 				if number <= t:
 					if number != moda[len(moda)-1]:
@@ -201,70 +206,84 @@ class Discreta(object):
 			moda.append(my_xi_list[position])
 		self.moda = moda
 		return moda
-	
-	
+
 
 class Continua(object):
 	indice = 0
-	at = 0
 	fi = []
-	k = 0
+	Efi = 0.0
+	xmax = 0.0
+	xmin = 0.0
+	at = 0.0
+	k = 0.0
+	xi = []
 	fr = []
 	F = []
 	Fr = []
-	
+
 	def __init__(self):
 		self.indice = 0
-		self.at = 0
 		self.fi = []
-		self.k
+		self.xmax = 0
+		self.xmin = 0
+		self.at = 0.0
+		self.k = 0.0
+		self.Efi = 0.0
+		self.xi = []
 		self.fr = []
 		self.F = []
 		self.Fr = []
-	
-	def insert_at(self, my_list):
-		at = 0
-		at = float(my_list[len(my_list)-1] - my_list[0])
-		self.at = at
-		return at
-	
+
 	def insert_fi(self, my_list):
 		fi = []
 		xi = []
-		
+
 		for x in my_list:
 			if xi.count(x) == 0:
 				xi.append(x)
 				fi.append(my_list.count(x))
-		
+
 		self.fi = fi
 		return fi
-	
-	def insert_k(self, my_list):
-		k = 0
-		total = 0.0
-		
+
+	def insert_Efi(self, my_list):
+		Efi = 0.0
+
 		for x in my_list:
-			total += float(x)
-		k = round(math.sqrt(total))
+			Efi += int(x)
+
+		self.Efi = Efi
+		return Efi
+
+	def insert_at(self, my_list):
+		at = 0
+		at = float(my_list[len(my_list)-1]) - float(my_list[0])
+		self.at = at
+		self.xmax = float(my_list[len(my_list)-1])
+		self.xmin = float(my_list[0])
+		return at
+
+	def insert_k(self, my_list, Efi):
+		k = 0
+		k = round(math.sqrt(float(Efi)))
 		self.k = k
 		return k
-	
-	def insert_xi(self, my_list, at, k):
+
+	def get_intervalo(self, my_list, at, k):
 		xi = []
-		
-		ic = round(at / int(math.sqrt(k)))
+		ic = round(float(at) / float(k))
 		xi.append(my_list[0])
-		
-		for x in range(int(math.sqrt(k))):
+
+		for x in range(int(k)):
 			if x != my_list[0]:
-				xi.append(int(xi[len(xi) - 1] + ic))
-		
+				xi.append(int(xi[len(xi) - 1]) + float(ic))
+
 		self.xi = xi
 		return xi
-	
+
+
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
-	# app.run(debug=True)
-	app.run(host='0.0.0.0', port=port)
+	app.run(debug=True)
+	# app.run(host='0.0.0.0', port=port)
