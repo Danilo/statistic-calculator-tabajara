@@ -29,15 +29,17 @@
 				<th>fr%</th>
 				<th>F</th>
 				<th>F%</th>
+				<th>Média(xi.fi)</th>
 			</tr>
 			{% for x in range((statistic.k)|int) %}
 			<tr align="center">
 				<td>{{ x+1 }}</th>
 				<td>{{ statistic.xi[x] }} |-- {{ statistic.xi[x+1] }}</td>
-				<td>{{ statistic.fi[x] }}</td>
+				<td>{{ statistic.new_fi[x] }}</td>
 				<td>{{ statistic.fr[x] }}%</td>
 				<td>{{ statistic.F[x] }}</td>
 				<td>{{ statistic.Fr[x] }}%</td>
+				<td>{{ statistic.media[x] }}</td>
 			</tr>
 			{% endfor %}
 			<tr align="center">

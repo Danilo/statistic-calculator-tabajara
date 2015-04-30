@@ -55,8 +55,20 @@ class TestContinuaClass(unittest.TestCase):
 	def test_insert_k(self):
 		self.assertEqual(self.continua.insert_k([3, 3, 2, 2], 5), 2)
 
-	def test_get_intervalo(self):
-		self.assertEqual(self.continua.get_intervalo(4000, 10), [1000, 2265, 3530, 4795])
+#	def test_insert_new_fi(self):
+#		self.assertEqual(self.continua.insert_new_fi(4000, 10), [1000, 2265, 3530, 4795])
+
+	def test_insert_F(self):
+		self.assertEqual(self.continua.insert_F([2, 2, 1]), [2, 4, 5])
+
+	def test_insert_Fr(self):
+		self.assertEqual(self.continua.insert_Fr([40.00, 40.00, 20.00]), [40.00, 80.00, 100.00])
+
+	def test_insert_media(self):
+		self.assertEqual(self.continua.insert_media([1, 2, 3], [2, 2, 1]), [2, 4, 3])
+
+	def test_insert_Exi_fi(self):
+		self.assertEqual(self.continua.insert_Exi_fi([2, 4, 3]), 9)
 
 if __name__ == '__main__':
 	unittest.main()

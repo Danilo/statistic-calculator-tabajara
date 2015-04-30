@@ -7,14 +7,7 @@ app = Flask(__name__)
 
 #continua
 # 111 90 121 105 122 61 128 112 128 93 108 138 88 110 112 112 97 128 102 125 87 119 104 116 96 114 107 113 80 113 123 95 115 70 115 101 114 127 92 103 78 118 100 115 116 98 119 72 125 109 79 139 75 109 123 124 108 125 116 83 94 106 117 82 122 99 124 84 91 130
-# 01  61|--71   02   2.86%  02    2.86%
-# 02  71|--81   05   7.14%  07   10.00%
-# 03  81|--91   06   8.57%  13   18.57%
-# 04  91|--101  10  14.29%  23   32.86%
-# 05 101|--111  12  17.14%  35   50.00%
-# 06 111|--121  18  25.71%  53   75.71%
-# 07 121|--131  15  21.43%  68   97.14%
-# 08 131|--141  02   2.86%  70  100.00%
+# 28 06 17 48 63 47 27 21 03 07 12 39 50 54 33 45 15 24 01 07 36 53 46 27 05 10 32 50 52 11 42 22 03 17 34 56 25 02 30 10 33 01 49 13 16 08 31 21 06 09 02 11 32 25 00 55 23 41 29 04 51 01 06 31 05 05 11 04 10 26 12 06 16 08 02 04 28
 
 @app.route('/')
 def index():
@@ -53,13 +46,13 @@ def data():
 			continua.insert_Efi(continua.fi)
 			continua.insert_at(dados_brutos)
 			continua.insert_k(dados_brutos, continua.Efi)
-			continua.get_intervalo(dados_brutos, continua.at, continua.k)
-			# continua.insert_new_fi(dados_brutos)
-			print "continua.xi %s" % continua.xi
-			print "continua.fi %s" %continua.fi
-			# continua.insert_fr(continua.fi, continua.Efi)
-			# continua.insert_F(continua.fi)
-			# continua.insert_Fr(continua.fr)
+			continua.insert_xi(dados_brutos, continua.at, continua.k)
+			continua.insert_new_fi(dados_brutos, continua.xi, round(continua.at / continua.k))
+			continua.insert_fr(continua.new_fi, continua.Efi)
+			continua.insert_F(continua.new_fi)
+			continua.insert_Fr(continua.fr)
+			continua.insert_media(continua.xi, continua.new_fi)
+			continua.insert_Exi_fi(continua.media)
 			return render_template('continua.html', statistic=continua, rol=dados_brutos)
 		else:
 			return """
@@ -211,15 +204,18 @@ class Discreta(object):
 class Continua(object):
 	indice = 0
 	fi = []
-	Efi = 0.0
+	Efi = 0
 	xmax = 0.0
 	xmin = 0.0
 	at = 0.0
 	k = 0.0
 	xi = []
+	new_fi = []
 	fr = []
 	F = []
 	Fr = []
+	media = []
+	Exi_fi = 0
 
 	def __init__(self):
 		self.indice = 0
@@ -228,11 +224,14 @@ class Continua(object):
 		self.xmin = 0
 		self.at = 0.0
 		self.k = 0.0
-		self.Efi = 0.0
+		self.Efi = 0
 		self.xi = []
+		self.new_fi = []
 		self.fr = []
 		self.F = []
 		self.Fr = []
+		self.media = []
+		self.Exi_fi = 0
 
 	def insert_fi(self, my_list):
 		fi = []
@@ -247,7 +246,7 @@ class Continua(object):
 		return fi
 
 	def insert_Efi(self, my_list):
-		Efi = 0.0
+		Efi = 0
 
 		for x in my_list:
 			Efi += int(x)
@@ -269,7 +268,7 @@ class Continua(object):
 		self.k = k
 		return k
 
-	def get_intervalo(self, my_list, at, k):
+	def insert_xi(self, my_list, at, k):
 		xi = []
 		ic = round(float(at) / float(k))
 		xi.append(my_list[0])
@@ -281,7 +280,79 @@ class Continua(object):
 		self.xi = xi
 		return xi
 
+	def insert_new_fi(self, my_list, xi, ic):
+		new_fi = []
+		first_num = 0.0
+		second_num = 0.0
 
+		first_num = my_list[0]
+
+		for y in xi:
+			counter = 0
+			second_num = first_num + ic
+
+			for x in my_list:
+				if x >= first_num:
+					if x < second_num:
+						counter += 1
+
+			new_fi.append(counter)
+			first_num = second_num
+
+		self.new_fi = new_fi
+		return new_fi
+
+	def insert_fr(self, my_list, total):
+		fr = []
+		num = 0.0
+
+		for x in my_list:
+			num = ((float(x) / float(total)) * 100)
+			fr.append(float("{0:6.2f}".format(num)))
+
+		self.fr = fr
+		return fr
+
+	def insert_F(self, my_list):
+		F = []
+		i = 0
+
+		for x in my_list:
+			i += int(x)
+			F.append(i)
+
+		self.F = F
+		return F
+
+	def insert_Fr(self, my_list):
+		i = 0
+		Fr = []
+
+		for x in my_list:
+			i += float(x)
+			Fr.append(i)
+
+		self.Fr = Fr
+		return Fr
+
+	def insert_media(self, my_xi_list, my_fi_list):
+		media = []
+		i = len(my_xi_list)
+
+		for x in range(i):
+			media.append(float(my_xi_list[x]) * float(my_fi_list[x]))
+
+		self.media = media
+		return media
+
+	def insert_Exi_fi(self, my_list):
+		Exi_fi = 0
+
+		for x in my_list:
+			Exi_fi += float(x)
+
+		self.Exi_fi = Exi_fi
+		return Exi_fi
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
