@@ -17,21 +17,21 @@
 		At = Xmax - Xmin => {{statistic.xmax}} - {{statistic.xmin}} = {{ statistic.at }}
 		<br/>
 		<h2>IC</h2>
-		Ic = at/k => {{ statistic.at }} / {{ statistic.k }} = {{ (statistic.at / statistic.k)|round }}
+		Ic = at/k => {{ statistic.at }} / {{ statistic.k }} = {{ statistic.ic }}
 		<br/>
 		<h2>Tabela da continua</h2>
 		<br/>
 		<table border="1" style="width:820px;">
 			<tr>
 				<th>Classe</th>
-				<th>Intervalo(xi)</th>
+				<th>Intervalo (xi)</th>
 				<th>fi</th>
 				<th>fr%</th>
 				<th>F</th>
 				<th>F%</th>
-				<th>Média(xi.fi)</th>
+				<th>Média (xi.fi)</th>
 			</tr>
-			{% for x in range((statistic.k)|int) %}
+			{% for x in range(statistic.lines) %}
 			<tr align="center">
 				<td>{{ x+1 }}</th>
 				<td>{{ statistic.xi[x] }} |-- {{ statistic.xi[x+1] }}</td>
@@ -52,6 +52,30 @@
 				<td>{{ (statistic.Exi_fi) }}</td>
 			<tr>
 		</table>
+		<br/>
+		<h2>Média:</h2>
+		X = {{ (statistic.Exi_fi) }} / {{ statistic.Efi }} => A Média ponderada é de {{ (statistic.Exi_fi / statistic.Efi)|round(2) }}
+		<br/>
+		<h2>Mediana:</h2>
+		{% if (statistic.Efi % 2) == 0 %}
+			(Efi / 2) e (Efi + 1) / 2 = ({{ statistic.Efi }} / 2) e ({{ statistic.Efi+1 }}) / 2 =>
+			{{ (statistic.Efi/2)|round|int }}º e {{ ((statistic.Efi+1)/2)|round|int }}º posições
+			<br/>
+			Md = ({{ rol[(statistic.Efi/2)|round|int] }} + {{ rol[((statistic.Efi+1)/2)|round|int] }}) / 2 => {{ ((rol[(statistic.Efi/2)|round|int]|float)+(rol[((statistic.Efi+1)/2)|round|int]|float)) / 2 }}
+		{% else %}
+			(Efi + 1) / 2 = {{ ((statistic.Efi+1)/2)|round|int }}º posição
+			<br/>
+			Md = ({{ rol[((statistic.Efi+1)/2)|round|int] }}) / 2 => {{ (rol[((statistic.Efi+1)/2)|round|int]|float) / 2 }}
+		{% endif %}
+		<br/>
+		<h2>Moda:</h2>
+		Mo =
+		{% if statistic.moda|length == 2 %}
+			{{ statistic.moda[0] }} e {{ statistic.moda[1] }}
+		{% else %}
+			{{ statistic.moda[0] }}
+		{% endif %}
+		<br/>
 		<br/>
 		<form name="form_id" method="GET" action="/">
 			<input type="submit" value="Voltar"/>

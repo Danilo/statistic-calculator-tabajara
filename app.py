@@ -47,12 +47,13 @@ def data():
 			continua.insert_at(dados_brutos)
 			continua.insert_k(dados_brutos, continua.Efi)
 			continua.insert_xi(dados_brutos, continua.at, continua.k)
-			continua.insert_new_fi(dados_brutos, continua.xi, round(continua.at / continua.k))
+			continua.insert_new_fi(dados_brutos, continua.xi, continua.ic)
 			continua.insert_fr(continua.new_fi, continua.Efi)
 			continua.insert_F(continua.new_fi)
 			continua.insert_Fr(continua.fr)
 			continua.insert_media(continua.xi, continua.new_fi)
 			continua.insert_Exi_fi(continua.media)
+			continua.lines = (len(continua.new_fi) - 1)
 			return render_template('continua.html', statistic=continua, rol=dados_brutos)
 		else:
 			return """
@@ -209,6 +210,7 @@ class Continua(object):
 	xmin = 0.0
 	at = 0.0
 	k = 0.0
+	ic = 0.0
 	xi = []
 	new_fi = []
 	fr = []
@@ -216,6 +218,7 @@ class Continua(object):
 	Fr = []
 	media = []
 	Exi_fi = 0
+	moda = []
 
 	def __init__(self):
 		self.indice = 0
@@ -224,6 +227,7 @@ class Continua(object):
 		self.xmin = 0
 		self.at = 0.0
 		self.k = 0.0
+		self.ic = 0.0
 		self.Efi = 0
 		self.xi = []
 		self.new_fi = []
@@ -232,6 +236,7 @@ class Continua(object):
 		self.Fr = []
 		self.media = []
 		self.Exi_fi = 0
+		self.moda = []
 
 	def insert_fi(self, my_list):
 		fi = []
@@ -277,7 +282,15 @@ class Continua(object):
 			if x != my_list[0]:
 				xi.append(int(xi[len(xi) - 1]) + float(ic))
 
+		while True:
+			if xi[len(xi) - 1] <= my_list[len(my_list) - 1]:
+				xi.append(int(xi[len(xi) - 1]) + float(ic))
+			else:
+				break
+
+		print xi
 		self.xi = xi
+		self.ic = ic
 		return xi
 
 	def insert_new_fi(self, my_list, xi, ic):
