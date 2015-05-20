@@ -1,13 +1,16 @@
 import os, math
 from flask import Flask, request, render_template
 app = Flask(__name__)
-# discreta examples
+#discreta
 # 3 4 3.5 5 3.5 4 5 5.5 4 5
 # 18 26 21 24 26 18 19 21 18 21 24 26 28 26 21 18 19 21 21 20 21 22 18 19 21 22 18 19 21 19
 
 #continua
 # 111 90 121 105 122 61 128 112 128 93 108 138 88 110 112 112 97 128 102 125 87 119 104 116 96 114 107 113 80 113 123 95 115 70 115 101 114 127 92 103 78 118 100 115 116 98 119 72 125 109 79 139 75 109 123 124 108 125 116 83 94 106 117 82 122 99 124 84 91 130
 # 28 06 17 48 63 47 27 21 03 07 12 39 50 54 33 45 15 24 01 07 36 53 46 27 05 10 32 50 52 11 42 22 03 17 34 56 25 02 30 10 33 01 49 13 16 08 31 21 06 09 02 11 32 25 00 55 23 41 29 04 51 01 06 31 05 05 11 04 10 26 12 06 16 08 02 04 28
+
+#desvio padrao
+# 1000 3000 2000 5000
 
 @app.route('/')
 def index():
@@ -55,6 +58,17 @@ def data():
 			continua.insert_Exi_fi(continua.media)
 			continua.lines = (len(continua.new_fi) - 1)
 			return render_template('continua.html', statistic=continua, rol=dados_brutos)
+		elif request.form['form_id'] == 'desvio_padrao':
+			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
+			desvio_padrao = DesvioPadrao()
+			desvio_padrao.insert_xi(dados_brutos)
+			desvio_padrao.insert_fi(dados_brutos)
+			desvio_padrao.insert_Efi(desvio_padrao.fi)
+			desvio_padrao.insert_media(desvio_padrao.xi, desvio_padrao.fi)
+			desvio_padrao.insert_Exi_fi(desvio_padrao.media)
+			desvio_padrao.insert_soma(desvio_padrao.xi, desvio_padrao.Exi_fi, desvio_padrao.Efi)
+			desvio_padrao.lines  = len(desvio_padrao.xi)
+			return render_template('desvio_padrao.html', statistic=desvio_padrao, rol=dados_brutos)
 		else:
 			return """
 				<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
@@ -366,6 +380,85 @@ class Continua(object):
 
 		self.Exi_fi = Exi_fi
 		return Exi_fi
+
+
+class DesvioPadrao(object):
+	lines = 0
+	xi = []
+	fi = []
+	Efi = 0
+	media = 0
+	Exi_fi = 0
+	soma = 0
+
+	def __init__(self):
+		self.lines = 0
+		self.xi = []
+		self.fi = []
+		self.Efi = 0
+		self.media = 0
+		self.Exi_fi = 0
+		self.soma = 0
+
+	def insert_xi(self, my_list):
+		xi = []
+
+		for x in my_list:
+			if xi.count(x) == 0:
+				xi.append(x)
+
+		self.xi = xi
+		return xi
+
+	def insert_fi(self, my_list):
+		fi = []
+		xi = []
+
+		for x in my_list:
+			if xi.count(x) == 0:
+				xi.append(x)
+				fi.append(my_list.count(x))
+
+		self.fi = fi
+		return fi
+
+	def insert_Efi(self, my_list):
+		Efi = 0
+
+		for x in my_list:
+			Efi += int(x)
+
+		self.Efi = Efi
+		return Efi
+
+	def insert_media(self, my_xi_list, my_fi_list):
+		media = []
+		i = len(my_xi_list)
+
+		for x in range(i):
+			media.append(float(my_xi_list[x]) * float(my_fi_list[x]))
+
+		self.media = media
+		return media
+
+	def insert_Exi_fi(self, my_list):
+		Exi_fi = 0
+
+		for x in my_list:
+			Exi_fi += float(x)
+
+		self.Exi_fi = Exi_fi
+		return Exi_fi
+
+	def insert_soma(self, my_list, Exi_fi, Efi):
+		soma = 0
+
+		for x in my_list:
+			soma += ((int(x) - (Exi_fi/Efi)) ** 2)
+
+		self.soma = soma
+		return soma
+
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
