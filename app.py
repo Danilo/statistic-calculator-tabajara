@@ -66,7 +66,7 @@ def data():
 			desvio_padrao.insert_Efi(desvio_padrao.fi)
 			desvio_padrao.insert_media(desvio_padrao.xi, desvio_padrao.fi)
 			desvio_padrao.insert_Exi_fi(desvio_padrao.media)
-			desvio_padrao.insert_soma(desvio_padrao.xi, desvio_padrao.Exi_fi, desvio_padrao.Efi)
+			desvio_padrao.insert_soma(dados_brutos, desvio_padrao.Exi_fi, desvio_padrao.Efi)
 			desvio_padrao.lines  = len(desvio_padrao.xi)
 			return render_template('desvio_padrao.html', statistic=desvio_padrao, rol=dados_brutos)
 		else:
@@ -454,10 +454,13 @@ class DesvioPadrao(object):
 		soma = 0
 
 		for x in my_list:
-			soma += ((int(x) - (Exi_fi/Efi)) ** 2)
+			soma += ((float(x) - (Exi_fi/Efi)) ** 2)
 
-		self.soma = soma
-		return soma
+		self.soma = round(soma, 4)
+		return round(soma, 4)
+
+	def do_sqrt(self, number):
+		return round(math.sqrt(number), 4)
 
 
 if __name__ == '__main__':

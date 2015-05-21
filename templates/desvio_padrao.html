@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<title>Statistic Calculator Tabajara v1.0 - Flask Edition</title>
+    </head>
+	<body>
+		<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
+		<br/>
+		<h2>Rol dos dados</h2>
+		{% for x in range(rol|length) %}
+			{{ rol[x] }}
+		{% endfor %}
+		<br/>
+    <h2>Média:</h2>
+    X = {{ (statistic.Exi_fi) }} / {{ statistic.Efi }} => A Média ponderada é de {{ (statistic.Exi_fi / statistic.Efi)|round(2) }}
+    <br/>
+    <h2>(xi - x) ^ 2</h2>
+    {% for x in range(statistic.lines) %}
+      ({{ statistic.xi[x] }} - {{ (statistic.Exi_fi / statistic.Efi)|round(2) }}) ^ 2 = {{ (statistic.xi[x] - (statistic.Exi_fi / statistic.Efi)|round(2)) ** 2 }}<br/>
+    {% endfor %}
+    -------------------------------------------------------------------------- <br/>
+    <h3>∑(xi - x) ^ 2 = {{ statistic.soma }}(soma de todos)</h3>
+    <h2>Desvio Padrão</h2>
+
+    <h3>Amostra</h3>
+    V2(x) = ∑(xi - x) ^ 2 / n - 1<br/>
+    V2(x) = ({{ statistic.soma }} / {{ statistic.Efi }} - 1) => {{ (statistic.soma / (statistic.Efi - 1))|round(4) }} (Variância)<br/>
+     V(x) = √{{ (statistic.soma / (statistic.Efi - 1))|round(4) }} => {{ statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) }} (Desvio Padrão)<br/>
+		<h3>Coeficiente de variância(Amostra)</h3>
+		CV = dp / x * 100<br/>
+		CV = ({{ statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) }} / {{ (statistic.Exi_fi / statistic.Efi)|round(4) }}) * 100 = {{ (statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) / (statistic.Exi_fi / statistic.Efi)  * 100)|round(4)}} ou {{ (statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) / (statistic.Exi_fi / statistic.Efi)  * 100)|round}} %<br/>
+    <h3>População</h3>
+    V2(x) = ∑(xi - x) ^ 2/n<br/>
+		V2(x) = ({{ statistic.soma }} / {{ statistic.Efi }}) => {{ (statistic.soma / (statistic.Efi))|round(4) }} (Variância)<br/>
+     V(x) = √{{ (statistic.soma / (statistic.Efi))|round(4) }} => {{ statistic.do_sqrt(statistic.soma / statistic.Efi) }} (Desvio padrão)<br/>
+		<h3>Coeficiente de variância(População)</h3>
+		CV = dp / x * 100<br/>
+		CV = ({{ statistic.do_sqrt(statistic.soma / statistic.Efi) }} / {{ (statistic.Exi_fi / statistic.Efi)|round(2) }}) * 100 = {{ (statistic.do_sqrt(statistic.soma / statistic.Efi) / (statistic.Exi_fi / statistic.Efi)  * 100)|round(4)}} ou {{ (statistic.do_sqrt(statistic.soma / statistic.Efi) / (statistic.Exi_fi / statistic.Efi)  * 100)|round}} %<br/>
+		<br/>
+    <br/>
+    <form name="form_id" method="GET" action="/">
+	     <input type="submit" value="Voltar"/>
+    </form>
+	<body>
+</html>
