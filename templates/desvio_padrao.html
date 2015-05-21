@@ -27,17 +27,17 @@
      V(x) = √{{ (statistic.soma / (statistic.Efi - 1))|round(4) }} => {{ statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) }} (Desvio Padrão)<br/>
 		<h3>Coeficiente de variância(Amostra)</h3>
 		CV = dp / x * 100<br/>
-		CV = ({{ statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) }} / {{ (statistic.Exi_fi / statistic.Efi)|round(4) }}) * 100 = {{ (statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) / (statistic.Exi_fi / statistic.Efi)  * 100)|round(4)}} ou {{ (statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) / (statistic.Exi_fi / statistic.Efi)  * 100)|round}} %<br/>
+		CV = ({{ statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) }} / {{ (statistic.Exi_fi / statistic.Efi)|round(4) }}) * 100 = {{ (statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) / (statistic.Exi_fi / statistic.Efi)  * 100)|round(4)}} ou {{ (statistic.do_sqrt(statistic.soma / (statistic.Efi - 1)) / (statistic.Exi_fi / statistic.Efi)  * 100)|round}}%<br/>
     <h3>População</h3>
-    V2(x) = ∑(xi - x) ^ 2/n<br/>
+    V2(x) = ∑(xi - x) ^ 2 / n<br/>
 		V2(x) = ({{ statistic.soma }} / {{ statistic.Efi }}) => {{ (statistic.soma / (statistic.Efi))|round(4) }} (Variância)<br/>
      V(x) = √{{ (statistic.soma / (statistic.Efi))|round(4) }} => {{ statistic.do_sqrt(statistic.soma / statistic.Efi) }} (Desvio padrão)<br/>
 		<h3>Coeficiente de variância(População)</h3>
 		CV = dp / x * 100<br/>
-		CV = ({{ statistic.do_sqrt(statistic.soma / statistic.Efi) }} / {{ (statistic.Exi_fi / statistic.Efi)|round(2) }}) * 100 = {{ (statistic.do_sqrt(statistic.soma / statistic.Efi) / (statistic.Exi_fi / statistic.Efi)  * 100)|round(4)}} ou {{ (statistic.do_sqrt(statistic.soma / statistic.Efi) / (statistic.Exi_fi / statistic.Efi)  * 100)|round}} %<br/>
+		CV = ({{ statistic.do_sqrt(statistic.soma / statistic.Efi) }} / {{ (statistic.Exi_fi / statistic.Efi)|round(2) }}) * 100 = {{ (statistic.do_sqrt(statistic.soma / statistic.Efi) / (statistic.Exi_fi / statistic.Efi)  * 100)|round(4)}} ou {{ (statistic.do_sqrt(statistic.soma / statistic.Efi) / (statistic.Exi_fi / statistic.Efi)  * 100)|round}}%<br/>
 		<br/>
     <br/>
-    <form name="form_id" method="GET" action="/">
+    <form name="form_id" method="POST" action="/">
 	     <input type="submit" value="Voltar"/>
     </form>
 	<body>

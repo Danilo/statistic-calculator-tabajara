@@ -11,8 +11,9 @@ app = Flask(__name__)
 
 #desvio padrao
 # 1000 3000 2000 5000
+# 12 11 10 9 8.5 11.5
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
 	return render_template('index.html')
 
@@ -302,7 +303,6 @@ class Continua(object):
 			else:
 				break
 
-		print xi
 		self.xi = xi
 		self.ic = ic
 		return xi
