@@ -39,7 +39,7 @@
 				<td>{{ statistic.fr[x] }}%</td>
 				<td>{{ statistic.F[x] }}</td>
 				<td>{{ statistic.Fr[x] }}%</td>
-				<td>{{ statistic.media[x] }}</td>
+				<td>{{ statistic.xi_fi[x] }}</td>
 			</tr>
 			{% endfor %}
 			<tr align="center">
@@ -53,7 +53,7 @@
 			<tr>
 		</table>
 		<br/>
-		<h2>Média:</h2>
+		<h2>Média Aritmética:</h2>
 		X = {{ (statistic.Exi_fi) }} / {{ statistic.Efi }} => A Média ponderada é de {{ (statistic.Exi_fi / statistic.Efi)|round(2) }}
 		<br/>
 		<h2>Mediana:</h2>

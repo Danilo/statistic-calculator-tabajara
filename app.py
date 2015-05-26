@@ -33,40 +33,40 @@ def data():
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			discreta = Discreta()
 			discreta.insert_xi(dados_brutos)
-			discreta.insert_fi(dados_brutos)
-			discreta.insert_Efi(discreta.fi)
-			discreta.insert_fr(discreta.fi, discreta.Efi)
-			discreta.insert_F(discreta.fi)
-			discreta.insert_Fr(discreta.fr)
-			discreta.insert_media(discreta.xi, discreta.fi)
-			discreta.insert_Exi_fi(discreta.media)
+			discreta.fi = insert_fi(dados_brutos)
+			discreta.Efi = insert_Efi(discreta.fi)
+			discreta.fr = insert_fr(discreta.fi, discreta.Efi)
+			discreta.F = insert_F(discreta.fi)
+			discreta.Fr = insert_Fr(discreta.fr)
+			discreta.xi_fi = insert_xi_fi(discreta.xi, discreta.fi)
+			discreta.Exi_fi = insert_Exi_fi(discreta.xi_fi)
 			discreta.insert_moda(discreta.xi, discreta.fi)
 			discreta.lines = len(discreta.xi)
 			return render_template('discreta.html', statistic=discreta, rol=dados_brutos)
 		elif request.form['form_id'] == 'continua':
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			continua = Continua()
-			continua.insert_fi(dados_brutos)
-			continua.insert_Efi(continua.fi)
+			continua.fi = insert_fi(dados_brutos)
+			continua.Efi = insert_Efi(continua.fi)
 			continua.insert_at(dados_brutos)
 			continua.insert_k(dados_brutos, continua.Efi)
 			continua.insert_xi(dados_brutos, continua.at, continua.k)
 			continua.insert_new_fi(dados_brutos, continua.xi, continua.ic)
-			continua.insert_fr(continua.new_fi, continua.Efi)
-			continua.insert_F(continua.new_fi)
-			continua.insert_Fr(continua.fr)
-			continua.insert_media(continua.xi, continua.new_fi)
-			continua.insert_Exi_fi(continua.media)
+			continua.fr = insert_fr(continua.new_fi, continua.Efi)
+			continua.F = insert_F(continua.new_fi)
+			continua.Fr = insert_Fr(continua.fr)
+			continua.xi_fi = insert_xi_fi(continua.xi, continua.new_fi)
+			continua.Exi_fi = insert_Exi_fi(continua.xi_fi)
 			continua.lines = (len(continua.new_fi) - 1)
 			return render_template('continua.html', statistic=continua, rol=dados_brutos)
 		elif request.form['form_id'] == 'desvio_padrao':
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			desvio_padrao = DesvioPadrao()
 			desvio_padrao.insert_xi(dados_brutos)
-			desvio_padrao.insert_fi(dados_brutos)
-			desvio_padrao.insert_Efi(desvio_padrao.fi)
-			desvio_padrao.insert_media(desvio_padrao.xi, desvio_padrao.fi)
-			desvio_padrao.insert_Exi_fi(desvio_padrao.media)
+			desvio_padrao.fi = insert_fi(dados_brutos)
+			desvio_padrao.Efi = insert_Efi(desvio_padrao.fi)
+			desvio_padrao.xi_fi = insert_xi_fi(desvio_padrao.xi, desvio_padrao.fi)
+			desvio_padrao.Exi_fi = insert_Exi_fi(desvio_padrao.xi_fi)
 			desvio_padrao.insert_soma(dados_brutos, desvio_padrao.Exi_fi, desvio_padrao.Efi)
 			desvio_padrao.lines  = len(desvio_padrao.xi)
 			return render_template('desvio_padrao.html', statistic=desvio_padrao, rol=dados_brutos)
@@ -85,6 +85,72 @@ def data_to_rol(my_list):
 	rol.sort()
 	return rol
 
+def insert_fi(my_list):
+	fi = []
+	xi = []
+
+	for x in my_list:
+		if xi.count(x) == 0:
+			xi.append(x)
+			fi.append(my_list.count(x))
+
+	return fi
+
+def insert_Efi(my_list):
+	Efi = 0
+
+	for x in my_list:
+		Efi += int(x)
+
+	return Efi
+
+def insert_fr(my_list, list_size):
+	fr = []
+	num = 0.0
+
+	for x in my_list:
+		num = ((float(x) / float(list_size)) * 100)
+		fr.append(float("{0:6.2f}".format(num)))
+
+	return fr
+
+def insert_F(my_list):
+	F = []
+	i = 0
+
+	for x in my_list:
+		i += int(x)
+		F.append(i)
+
+	return F
+
+def insert_Fr(my_list):
+	i = 0
+	Fr = []
+
+	for x in my_list:
+		i += float(x)
+		Fr.append(i)
+
+	return Fr
+
+def insert_xi_fi(my_xi_list, my_fi_list):
+	xi_fi = []
+	i = len(my_xi_list)
+
+	for x in range(i):
+		xi_fi.append(float(my_xi_list[x]) * float(my_fi_list[x]))
+
+	return xi_fi
+
+def insert_Exi_fi(my_list):
+	Exi_fi = 0
+
+	for x in my_list:
+		Exi_fi += float(x)
+
+	return Exi_fi
+
 class Discreta(object):
 	lines = 0
 	Efi = 0
@@ -93,7 +159,7 @@ class Discreta(object):
 	fr = []
 	F = []
 	Fr = []
-	media = []
+	xi_fi = []
 	Exi_fi = 0
 	moda = []
 
@@ -105,7 +171,7 @@ class Discreta(object):
 		self.fr = []
 		self.F = []
 		self.Fr = []
-		self.media = []
+		self.xi_fi = []
 		self.Exi_fi = 0
 		self.moda = []
 
@@ -118,70 +184,6 @@ class Discreta(object):
 
 		self.xi = xi
 		return xi
-
-	def insert_fi(self, my_list):
-		fi = []
-		xi = []
-
-		for x in my_list:
-			if xi.count(x) == 0:
-				xi.append(x)
-				fi.append(my_list.count(x))
-
-		self.fi = fi
-		return fi
-
-	def insert_Efi(self, my_list):
-		Efi = 0
-
-		for x in my_list:
-			Efi += int(x)
-
-		self.Efi = Efi
-		return Efi
-
-	def insert_fr(self, my_list, total):
-		fr = []
-		num = 0.0
-
-		for x in my_list:
-			num = ((float(x) / float(total)) * 100)
-			fr.append(float("{0:6.2f}".format(num)))
-
-		self.fr = fr
-		return fr
-
-	def insert_F(self, my_list):
-		F = []
-		i = 0
-
-		for x in my_list:
-			i += int(x)
-			F.append(i)
-
-		self.F = F
-		return F
-
-	def insert_Fr(self, my_list):
-		i = 0
-		Fr = []
-
-		for x in my_list:
-			i += float(x)
-			Fr.append(i)
-
-		self.Fr = Fr
-		return Fr
-
-	def insert_media(self, my_xi_list, my_fi_list):
-		media = []
-		i = len(my_xi_list)
-
-		for x in range(i):
-			media.append(float(my_xi_list[x]) * float(my_fi_list[x]))
-
-		self.media = media
-		return media
 
 	def insert_Exi_fi(self, my_list):
 		Exi_fi = 0
@@ -231,7 +233,7 @@ class Continua(object):
 	fr = []
 	F = []
 	Fr = []
-	media = []
+	xi_fi = []
 	Exi_fi = 0
 	moda = []
 
@@ -249,30 +251,9 @@ class Continua(object):
 		self.fr = []
 		self.F = []
 		self.Fr = []
-		self.media = []
+		self.xi_fi = []
 		self.Exi_fi = 0
 		self.moda = []
-
-	def insert_fi(self, my_list):
-		fi = []
-		xi = []
-
-		for x in my_list:
-			if xi.count(x) == 0:
-				xi.append(x)
-				fi.append(my_list.count(x))
-
-		self.fi = fi
-		return fi
-
-	def insert_Efi(self, my_list):
-		Efi = 0
-
-		for x in my_list:
-			Efi += int(x)
-
-		self.Efi = Efi
-		return Efi
 
 	def insert_at(self, my_list):
 		at = 0
@@ -329,65 +310,13 @@ class Continua(object):
 		self.new_fi = new_fi
 		return new_fi
 
-	def insert_fr(self, my_list, total):
-		fr = []
-		num = 0.0
-
-		for x in my_list:
-			num = ((float(x) / float(total)) * 100)
-			fr.append(float("{0:6.2f}".format(num)))
-
-		self.fr = fr
-		return fr
-
-	def insert_F(self, my_list):
-		F = []
-		i = 0
-
-		for x in my_list:
-			i += int(x)
-			F.append(i)
-
-		self.F = F
-		return F
-
-	def insert_Fr(self, my_list):
-		i = 0
-		Fr = []
-
-		for x in my_list:
-			i += float(x)
-			Fr.append(i)
-
-		self.Fr = Fr
-		return Fr
-
-	def insert_media(self, my_xi_list, my_fi_list):
-		media = []
-		i = len(my_xi_list)
-
-		for x in range(i):
-			media.append(float(my_xi_list[x]) * float(my_fi_list[x]))
-
-		self.media = media
-		return media
-
-	def insert_Exi_fi(self, my_list):
-		Exi_fi = 0
-
-		for x in my_list:
-			Exi_fi += float(x)
-
-		self.Exi_fi = Exi_fi
-		return Exi_fi
-
 
 class DesvioPadrao(object):
 	lines = 0
 	xi = []
 	fi = []
 	Efi = 0
-	media = 0
+	xi_fi = 0
 	Exi_fi = 0
 	soma = 0
 
@@ -396,7 +325,7 @@ class DesvioPadrao(object):
 		self.xi = []
 		self.fi = []
 		self.Efi = 0
-		self.media = 0
+		self.xi_fi = 0
 		self.Exi_fi = 0
 		self.soma = 0
 
@@ -409,46 +338,6 @@ class DesvioPadrao(object):
 
 		self.xi = xi
 		return xi
-
-	def insert_fi(self, my_list):
-		fi = []
-		xi = []
-
-		for x in my_list:
-			if xi.count(x) == 0:
-				xi.append(x)
-				fi.append(my_list.count(x))
-
-		self.fi = fi
-		return fi
-
-	def insert_Efi(self, my_list):
-		Efi = 0
-
-		for x in my_list:
-			Efi += int(x)
-
-		self.Efi = Efi
-		return Efi
-
-	def insert_media(self, my_xi_list, my_fi_list):
-		media = []
-		i = len(my_xi_list)
-
-		for x in range(i):
-			media.append(float(my_xi_list[x]) * float(my_fi_list[x]))
-
-		self.media = media
-		return media
-
-	def insert_Exi_fi(self, my_list):
-		Exi_fi = 0
-
-		for x in my_list:
-			Exi_fi += float(x)
-
-		self.Exi_fi = Exi_fi
-		return Exi_fi
 
 	def insert_soma(self, my_list, Exi_fi, Efi):
 		soma = 0
