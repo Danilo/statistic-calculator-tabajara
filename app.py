@@ -185,15 +185,6 @@ class Discreta(object):
 		self.xi = xi
 		return xi
 
-	def insert_Exi_fi(self, my_list):
-		Exi_fi = 0
-
-		for x in my_list:
-			Exi_fi += float(x)
-
-		self.Exi_fi = Exi_fi
-		return Exi_fi
-
 	def insert_moda(self, my_xi_list, my_fi_list):
 		moda = []
 		number = 0
