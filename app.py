@@ -32,7 +32,7 @@ def data():
 		if request.form['form_id'] == 'discreta':
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			discreta = Discreta()
-			discreta.insert_xi(dados_brutos)
+			discreta.xi = insert_xi(dados_brutos)
 			discreta.fi = insert_fi(dados_brutos)
 			discreta.Efi = insert_Efi(discreta.fi)
 			discreta.fr = insert_fr(discreta.fi, discreta.Efi)
@@ -50,7 +50,7 @@ def data():
 			continua.Efi = insert_Efi(continua.fi)
 			continua.insert_at(dados_brutos)
 			continua.insert_k(dados_brutos, continua.Efi)
-			continua.insert_intervalo(dados_brutos, continua.at, continua.k)
+			continua.insert_intervalo_do_xi(dados_brutos, continua.at, continua.k)
 			continua.insert_fi_do_intervalo(dados_brutos, continua.xi, continua.ic)
 			continua.fr = insert_fr(continua.new_fi, continua.Efi)
 			continua.F = insert_F(continua.new_fi)
@@ -62,7 +62,7 @@ def data():
 		elif request.form['form_id'] == 'desvio_padrao':
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			desvio_padrao = DesvioPadrao()
-			desvio_padrao.insert_xi(dados_brutos)
+			desvio_padrao.xi = insert_xi(dados_brutos)
 			desvio_padrao.fi = insert_fi(dados_brutos)
 			desvio_padrao.Efi = insert_Efi(desvio_padrao.fi)
 			desvio_padrao.xi_fi = insert_xi_fi(desvio_padrao.xi, desvio_padrao.fi)
@@ -84,6 +84,15 @@ def data_to_rol(my_list):
 		rol.append(float(x))
 	rol.sort()
 	return rol
+
+def insert_xi(my_list):
+	xi = []
+
+	for x in my_list:
+		if xi.count(x) == 0:
+			xi.append(x)
+
+	return xi
 
 def insert_fi(my_list):
 	fi = []
@@ -175,16 +184,6 @@ class Discreta(object):
 		self.Exi_fi = 0
 		self.moda = []
 
-	def insert_xi(self, my_list):
-		xi = []
-
-		for x in my_list:
-			if xi.count(x) == 0:
-				xi.append(x)
-
-		self.xi = xi
-		return xi
-
 	def insert_moda(self, my_xi_list, my_fi_list):
 		moda = []
 		number = 0
@@ -260,7 +259,7 @@ class Continua(object):
 		self.k = k
 		return k
 
-	def insert_intervalo(self, my_list, at, k):
+	def insert_intervalo_do_xi(self, my_list, at, k):
 		xi = []
 		ic = round(float(at) / float(k))
 		xi.append(my_list[0])
@@ -319,16 +318,6 @@ class DesvioPadrao(object):
 		self.xi_fi = 0
 		self.Exi_fi = 0
 		self.soma = 0
-
-	def insert_xi(self, my_list):
-		xi = []
-
-		for x in my_list:
-			if xi.count(x) == 0:
-				xi.append(x)
-
-		self.xi = xi
-		return xi
 
 	def insert_soma(self, my_list, Exi_fi, Efi):
 		soma = 0
