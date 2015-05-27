@@ -81,8 +81,12 @@ class TestContinuaClass(unittest.TestCase):
 	def test_insert_k(self):
 		self.assertEqual(self.continua.insert_k([3, 3, 2, 2], 5), 2)
 
-#	def test_insert_new_fi(self):
-#		self.assertEqual(self.continua.insert_new_fi(4000, 10), [1000, 2265, 3530, 4795])
+	def insert_fi_do_intervalo(self):
+		data_rol = [61.0, 70.0, 72.0, 75.0, 78.0, 79.0, 80.0, 82.0, 83.0, 84.0, 87.0, 88.0, 90.0, 91.0, 92.0, 93.0, 94.0, 95.0, 96.0, 97.0, 98.0, 99.0, 100.0, 101.0, 102.0, 103.0, 104.0, 105.0, 106.0, 107.0, 108.0, 108.0, 109.0, 109.0, 110.0, 111.0, 112.0, 112.0, 112.0, 113.0, 113.0, 114.0, 114.0, 115.0, 115.0, 115.0, 116.0, 116.0, 116.0, 117.0, 118.0, 119.0, 119.0, 121.0, 122.0, 122.0, 123.0, 123.0, 124.0, 124.0, 125.0, 125.0, 125.0, 127.0, 128.0, 128.0, 128.0, 130.0, 138.0, 139.0]
+		data_xi  = [61.0, 71.0, 81.0, 91.0, 101.0, 111.0, 121.0, 131.0, 141.0]
+		ic = 10
+		result   = [2, 5, 6, 10, 12, 18, 15, 2, 0]
+		self.assertEqual(self.continua.insert_fi_do_intervalo(data_rol, data_xi, ic), result)
 
 
 if __name__ == '__main__':

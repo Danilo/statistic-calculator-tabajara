@@ -50,8 +50,8 @@ def data():
 			continua.Efi = insert_Efi(continua.fi)
 			continua.insert_at(dados_brutos)
 			continua.insert_k(dados_brutos, continua.Efi)
-			continua.insert_xi(dados_brutos, continua.at, continua.k)
-			continua.insert_new_fi(dados_brutos, continua.xi, continua.ic)
+			continua.insert_intervalo(dados_brutos, continua.at, continua.k)
+			continua.insert_fi_do_intervalo(dados_brutos, continua.xi, continua.ic)
 			continua.fr = insert_fr(continua.new_fi, continua.Efi)
 			continua.F = insert_F(continua.new_fi)
 			continua.Fr = insert_Fr(continua.fr)
@@ -260,7 +260,7 @@ class Continua(object):
 		self.k = k
 		return k
 
-	def insert_xi(self, my_list, at, k):
+	def insert_intervalo(self, my_list, at, k):
 		xi = []
 		ic = round(float(at) / float(k))
 		xi.append(my_list[0])
@@ -279,7 +279,7 @@ class Continua(object):
 		self.ic = ic
 		return xi
 
-	def insert_new_fi(self, my_list, xi, ic):
+	def insert_fi_do_intervalo(self, my_list, xi, ic):
 		new_fi = []
 		first_num = 0.0
 		second_num = 0.0
