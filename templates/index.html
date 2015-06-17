@@ -5,16 +5,50 @@
 	<body>
 		<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
 		<br/>
-		<form name="form_id" method="POST" action="data">
+		<form name="form" method="POST" action="data">
 			<h2>
 				Dados Brutos:
 				<input type="text" name="dados" size="78"/>
-				<select name="form_id" id="form_id">
+				<select name="form" id="form">
 					<option value="discreta">Discreta</option>
 					<option value="continua">Continua</option>
 					<option value="desvio_padrao">Desvio Padrão</option>
 				</select>
 				<input type="submit" value="Gerar tabela"/>
+			</h2>
+		</form>
+		<br/>
+		<br/>
+		<form name="form" method="POST" action="data">
+			<select name="form" id="form" hidden="true">
+				<option value="distribuicao_normal"></option>
+			</select>
+			<h2>
+				Distribuição Normal
+				<h3>
+					Média: <input type="text" name="media" size="50"/><br/>
+					Desvio Padrão: <input type="text" name="desvio_padrao" size="50"/><br/>
+					<br/>
+					<input type="submit" value="Calcular"/>
+				</h3>
+			</h2>
+		</form>
+		<br/>
+		<br/>
+		<form name="form" method="POST" action="data">
+			<select name="form" id="form" hidden="true">
+				<option value="distribuicao_binomial"></option>
+			</select>
+			<h2>
+				Distribuição Binomial
+				<h3>
+					p: <input type="text" name="p" size="50"/><br/>
+					q: <input type="text" name="q" size="50"/><br/>
+					n: <input type="text" name="n" size="50"/><br/>
+					k: <input type="text" name="k" size="50"/><br/>
+					<br/>
+					<input type="submit" value="Calcular"/>
+				</h3>
 			</h2>
 		</form>
 	</body>

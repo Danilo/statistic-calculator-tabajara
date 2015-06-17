@@ -17,19 +17,12 @@ app = Flask(__name__)
 def index():
 	return render_template('index.html')
 
-@app.route('/data', methods=['GET', 'POST'])
+@app.route('/data', methods=['POST'])
 def data():
 
 	if request.method == 'POST':
 
-		if len(request.form['dados']) == 0:
-			return """
-				<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
-				<br/>
-				<h1>Data error!!!</h1>
-				"""
-
-		if request.form['form_id'] == 'discreta':
+		if request.form['form'] == 'discreta':
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			discreta = Discreta()
 			discreta.xi = insert_xi(dados_brutos)
@@ -43,7 +36,7 @@ def data():
 			discreta.moda = insert_moda(discreta.xi, discreta.fi)
 			discreta.lines = len(discreta.xi)
 			return render_template('discreta.html', statistic=discreta, rol=dados_brutos)
-		elif request.form['form_id'] == 'continua':
+		elif request.form['form'] == 'continua':
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			continua = Continua()
 			continua.fi = insert_fi(dados_brutos)
@@ -59,7 +52,7 @@ def data():
 			continua.Exi_fi = insert_Exi_fi(continua.xi_fi)
 			continua.lines = (len(continua.new_fi) - 1)
 			return render_template('continua.html', statistic=continua, rol=dados_brutos)
-		elif request.form['form_id'] == 'desvio_padrao':
+		elif request.form['form'] == 'desvio_padrao':
 			dados_brutos = data_to_rol(request.form['dados'].encode('UTF8').split())
 			desvio_padrao = DesvioPadrao()
 			desvio_padrao.xi = insert_xi(dados_brutos)
@@ -70,6 +63,10 @@ def data():
 			desvio_padrao.insert_soma(dados_brutos, desvio_padrao.Exi_fi, desvio_padrao.Efi)
 			desvio_padrao.lines  = len(desvio_padrao.xi)
 			return render_template('desvio_padrao.html', statistic=desvio_padrao, rol=dados_brutos)
+		elif request.form['form'] == 'distribuicao_normal':
+			return render_template('distribuicao_normal.html')
+		elif request.form['form'] == 'distribuicao_binomial':
+			return render_template('distribuicao_binomial.html')
 		else:
 			return """
 				<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
