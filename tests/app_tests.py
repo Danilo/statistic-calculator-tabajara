@@ -1,5 +1,5 @@
 import unittest
-from app import data_to_rol, insert_xi, insert_fi, insert_Efi, insert_fr, insert_F, insert_Fr, insert_xi_fi, insert_Exi_fi, Discreta, Continua
+from app import data_to_rol, insert_xi, insert_fi, insert_Efi, insert_fr, insert_F, insert_Fr, insert_xi_fi, insert_Exi_fi, insert_moda, Continua
 
 class TestCommonFunctions(unittest.TestCase):
 	def test_data_to_rol(self):
@@ -64,13 +64,11 @@ class TestCommonFunctions(unittest.TestCase):
 		result = 9
 		self.assertEqual(insert_Exi_fi(data), result)
 
-
-class TestDiscretaClass(unittest.TestCase):
-	def setUp(self):
-		self.discreta = Discreta()
-
 	def test_insert_moda(self):
-		self.assertEqual(self.discreta.insert_moda([17, 18, 19, 20, 21], [3, 18, 17, 8, 4]), [18])
+		data_xi = [17, 18, 19, 20, 21]
+		data_fi = [3, 18, 17, 8, 4]
+		result  = [18]
+		self.assertEqual(insert_moda(data_xi, data_fi), result)
 
 
 class TestContinuaClass(unittest.TestCase):

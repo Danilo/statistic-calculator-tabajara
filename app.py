@@ -40,7 +40,7 @@ def data():
 			discreta.Fr = insert_Fr(discreta.fr)
 			discreta.xi_fi = insert_xi_fi(discreta.xi, discreta.fi)
 			discreta.Exi_fi = insert_Exi_fi(discreta.xi_fi)
-			discreta.insert_moda(discreta.xi, discreta.fi)
+			discreta.moda = insert_moda(discreta.xi, discreta.fi)
 			discreta.lines = len(discreta.xi)
 			return render_template('discreta.html', statistic=discreta, rol=dados_brutos)
 		elif request.form['form_id'] == 'continua':
@@ -160,6 +160,29 @@ def insert_Exi_fi(my_list):
 
 	return Exi_fi
 
+def insert_moda(my_xi_list, my_fi_list):
+	moda = []
+	number = 0
+	position = 0
+
+	for x, s in enumerate(my_fi_list):
+		if number < s:
+			number = s
+			position = x
+	moda.append(my_xi_list[position])
+
+	if my_fi_list.count(number) > 1:
+		number = 0
+		position = 0
+
+		for j, t in enumerate(my_fi_list):
+			if number <= t:
+				if number != moda[len(moda)-1]:
+					number = t
+					position = j
+		moda.append(my_xi_list[position])
+	return moda
+
 class Discreta(object):
 	lines = 0
 	Efi = 0
@@ -183,30 +206,6 @@ class Discreta(object):
 		self.xi_fi = []
 		self.Exi_fi = 0
 		self.moda = []
-
-	def insert_moda(self, my_xi_list, my_fi_list):
-		moda = []
-		number = 0
-		position = 0
-
-		for x, s in enumerate(my_fi_list):
-			if number < s:
-				number = s
-				position = x
-		moda.append(my_xi_list[position])
-
-		if my_fi_list.count(number) > 1:
-			number = 0
-			position = 0
-
-			for j, t in enumerate(my_fi_list):
-				if number <= t:
-					if number != moda[len(moda)-1]:
-						number = t
-						position = j
-			moda.append(my_xi_list[position])
-		self.moda = moda
-		return moda
 
 
 class Continua(object):
