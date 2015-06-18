@@ -68,7 +68,7 @@ def data():
 			desvio_padrao.Exi_fi = insert_Exi_fi(desvio_padrao.xi_fi)
 			desvio_padrao.insert_soma(dados_brutos, desvio_padrao.Exi_fi, desvio_padrao.Efi)
 			desvio_padrao.lines  = len(desvio_padrao.xi)
-			return render_template('desvio_padrao.html', statistic=desvio_padrao, rol=dados_brutos)
+			return render_template('desvio_padrao.html', statistic=desvio_padrao, rol=dados_brutos, math=math)
 		elif request.form['form'] == 'distribuicao_normal':
 			return render_template('distribuicao_normal.html')
 		elif request.form['form'] == 'distribuicao_binomial':
@@ -342,10 +342,6 @@ class DesvioPadrao(object):
 
 		self.soma = round(soma, 4)
 		return round(soma, 4)
-
-	def do_sqrt(self, number):
-		return round(math.sqrt(number), 4)
-
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
