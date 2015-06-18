@@ -6,13 +6,14 @@
 		<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
 		<br/>
     Distribuição Binomial<br/><br/>
-    p: 0.4<br/>
-    q: 0.6<br/>
-    n: 10<br/>
-    k: 10<br/>
+    p: {{ p }}<br/>
+    q: {{ q }}<br/>
+    n: {{ n }}<br/>
+    k: {{ k }}<br/>
     <br/>
-    TOTAL = 0.0001 = 0.01%<br/>
-    Média: 60.000000 - Variância: 15.000000 - Desvio: 3.872983<br/>
+    TOTAL = {{ total|round(4) }} = {{ (total)|round(4) * 100 }}%<br/>
+		<br/>
+    Média: {{ n*p }} - Variância: {{ p*q*n }} - Desvio: {{ math.sqrt(n*p*q) }}<br/>
 		<br/>
 		<form name="form_id" method="POST" action="/">
 			<input type="submit" value="Voltar"/>

@@ -13,6 +13,12 @@ app = Flask(__name__)
 # 1000 3000 2000 5000
 # 12 11 10 9 8.5 11.5
 
+#distribuicao binomial
+# p = 0.4 q = 0.6 n = 10 k = 10 total 0.0001 0.01%
+
+#p = 0.75 q = 0.25 n = 80 k = 12
+# Media 60.000000 - Variancia 15.000000 - Desvio 3.872983
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
 	return render_template('index.html')
@@ -66,7 +72,12 @@ def data():
 		elif request.form['form'] == 'distribuicao_normal':
 			return render_template('distribuicao_normal.html')
 		elif request.form['form'] == 'distribuicao_binomial':
-			return render_template('distribuicao_binomial.html')
+			p = float(request.form['p'])
+			q = float(request.form['q'])
+			n = float(request.form['n'])
+			k = float(request.form['k'])
+			total = distribuicao_binomial(p, q, n, k)
+			return render_template('distribuicao_binomial.html', p=p, q=q, n=n, k=k, total=total, math=math)
 		else:
 			return """
 				<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
@@ -179,6 +190,14 @@ def insert_moda(my_xi_list, my_fi_list):
 					position = j
 		moda.append(my_xi_list[position])
 	return moda
+
+def distribuicao_binomial(p, q, n, k):
+	total = 0.0
+	fn = math.factorial(n)
+	fk = math.factorial(k)
+	fn_k = math.factorial(n-k)
+	total = (fn / (fk * fn_k)) * (p ** k) * (q ** (n - k))
+	return total
 
 class Discreta(object):
 	lines = 0
