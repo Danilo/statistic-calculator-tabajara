@@ -13,10 +13,13 @@ app = Flask(__name__)
 # 1000 3000 2000 5000
 # 12 11 10 9 8.5 11.5
 
+#distribuicao normal
+# media 300
+# desvio padrao 20
+
 #distribuicao binomial
 # p = 0.4 q = 0.6 n = 10 k = 10 total 0.0001 0.01%
-
-#p = 0.75 q = 0.25 n = 80 k = 12
+# p = 0.75 q = 0.25 n = 80 k = 12
 # Media 60.000000 - Variancia 15.000000 - Desvio 3.872983
 
 @app.route('/', methods=['GET', 'POST'])
@@ -70,7 +73,10 @@ def data():
 			desvio_padrao.lines  = len(desvio_padrao.xi)
 			return render_template('desvio_padrao.html', statistic=desvio_padrao, rol=dados_brutos, math=math)
 		elif request.form['form'] == 'distribuicao_normal':
-			return render_template('distribuicao_normal.html')
+			z = float(request.form['z'])
+			media = float(request.form['media'])
+			desvio_padrao = float(request.form['desvio_padrao'])
+			return render_template('distribuicao_normal.html', z=z, media=media, desvio_padrao=desvio_padrao)
 		elif request.form['form'] == 'distribuicao_binomial':
 			p = float(request.form['p'])
 			q = float(request.form['q'])

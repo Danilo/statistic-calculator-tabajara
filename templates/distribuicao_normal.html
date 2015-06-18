@@ -5,11 +5,12 @@
 	<body>
 		<h1>Statistic Calculator Tabajara v1.0 - Flask Edition</h1>
 		<br/>
-    Média: 300<br/>
-    Desvio Padrão: 20<br/>
+		Z: {{ z }}<br/>
+    Média: {{ media }}<br/>
+    Desvio Padrão: {{ desvio_padrao }}<br/>
     <br/>
-    Z = x - x / ø(x) => 280 - 300 / 20 => - 20 / 20 = - 1 => - 1.0<br/>
-    Na tabela de distribuição normal -1.0 => 1.0 | 0 = 0.3413<br/>
+    Z = x - x / ø(x) => {{ z }} - {{ media }} / {{ desvio_padrao }} => {{ z - media }} / {{ desvio_padrao }} = {{ (z - media) / desvio_padrao }}<br/>
+    Na tabela de distribuição normal {{ ((z - media) / desvio_padrao)|round(2) }} => 0.3413<br/>
     <br/>
     Probabilidade: 0.5 - 0.3413 = 0.1587 => 15.87%<br/>
 		<br/>
