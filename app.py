@@ -73,10 +73,10 @@ def data():
 			desvio_padrao.lines  = len(desvio_padrao.xi)
 			return render_template('desvio_padrao.html', statistic=desvio_padrao, rol=dados_brutos, math=math)
 		elif request.form['form'] == 'distribuicao_normal':
-			z = float(request.form['z'])
+			x = float(request.form['x'])
 			media = float(request.form['media'])
 			desvio_padrao = float(request.form['desvio_padrao'])
-			return render_template('distribuicao_normal.html', z=z, media=media, desvio_padrao=desvio_padrao)
+			return render_template('distribuicao_normal.html', x=x, media=media, desvio_padrao=desvio_padrao)
 		elif request.form['form'] == 'distribuicao_binomial':
 			p = float(request.form['p'])
 			q = float(request.form['q'])
@@ -351,5 +351,5 @@ class DesvioPadrao(object):
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
-	#app.run(debug=True)
-	app.run(host='0.0.0.0', port=port)
+	app.run(debug=True)
+	#app.run(host='0.0.0.0', port=port)
