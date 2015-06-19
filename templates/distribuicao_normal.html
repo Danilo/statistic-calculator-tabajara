@@ -10,9 +10,9 @@
     Desvio Padrão: {{ desvio_padrao }}<br/>
     <br/>
     Z = X - Média / Desvio Padrão => {{ x }} - {{ media }} / {{ desvio_padrao }} => {{ x - media }} / {{ desvio_padrao }} = {{ (x - media) / desvio_padrao }}<br/>
-    Na tabela de distribuição normal {{ ((x - media) / desvio_padrao)|round(2) }} => 0.3413<br/>
+    Na tabela de distribuição normal {{ ((x - media) / desvio_padrao)|round(2) }} => {{ dn }}<br/>
     <br/>
-    Probabilidade: 0.5 - 0.3413 = 0.1587 => 15.87%<br/>
+    Probabilidade: 0.5 - {{ dn }} = {{ 0.5 - dn }} => {{ (0.5 - dn) * 100 }}%<br/>
 		<br/>
 		<form name="form_id" method="POST" action="/">
 			<input type="submit" value="Voltar"/>
